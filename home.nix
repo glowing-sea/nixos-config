@@ -28,7 +28,8 @@ in
     kdePackages.kcalc
     kdePackages.kclock
     xournalpp
-    texliveFull
+    texliveFull # many packages !!!
+    mission-center
     # uv
     # python3
   ];

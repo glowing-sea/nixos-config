@@ -99,3 +99,7 @@ sudo nix sudo nixos-rebuild switch --flake
 
 # Declare password
 nix-shell -p mkpasswd --run "mkpasswd -m sha-512"
+
+# Flatpak
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak update

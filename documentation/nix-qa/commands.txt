@@ -1,3 +1,22 @@
+# Change password
+
+nix-shell -p mkpasswd --run "mkpasswd -m sha-512" > /home/eiri/nixos-config/secrets/eiri-password-hash
+
+
+# 营救
+
+nixos-enter --root /mnt
+passwd eiri
+passwd root
+nixos-rebuild boot --flake /home/eiri/nixos-config#eiri-coffee
+exit
+umount -R /mnt
+reboot
+
+# Flatpak
+
+
+
 # ============ Nix ============ #
 
 # Update Repo

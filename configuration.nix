@@ -78,7 +78,17 @@
   services.desktopManager.plasma6.enable = true;
   services.xserver.xkb = { layout = "au"; variant = ""; }; # keymap in x11  
 
+  # Hyperland
+  services.getty.autologinUser = "eiri";
+  programs.hyprland = {
+    enable = true;
+    # withUWSM = true; # systemd wrapper of wayland
+    xwayland.enable = true;
+  };
+
+
   # Essential System Tools
+  services.flatpak.enable = true;
   programs.firefox.enable = true;
   programs.steam = {
     enable = true;
@@ -93,14 +103,40 @@
     pciutils
     fastfetch
     python3
+    nvtopPackages.full # GPU monitor
+    nvitop # Python-based GPU monitor (great for ML)
+
+    # Hyprland
+
+    # --- Terminals ---
+    kitty             # Primary (Nvidia/GPU accelerated)
+    foot              # Secondary (CPU-based / Wayland native backup)
+
+    # --- Desktop Essentials ---
+    waybar            # The top bar
+    rofi      # App launcher (Wayland fork)
+    swww              # Wallpaper daemon (smooth transitions)
+    # hyprpaper # simple wallpaper
+
+    # --- Notifications (Choose ONE, Dunst is easier for beginners) ---
+    dunst             # Notification daemon
+    libnotify         # Provides 'notify-send' command
+    # mako # notification
+
+    # --- Utils ---
+    grim              # Screenshot (take image)
+    slurp             # Screenshot (select region)
+    wl-clipboard      # Clipboard (copy/paste support)
+    pavucontrol       # Audio GUI (essential for Pipewire)
   ];
   
 
   # User
+  # users.mutableUsers = false;
   users.users.eiri = {
     isNormalUser = true;
     description = "eiri";
-    hashedPassword = lib.removeSuffix "\n" (builtins.readFile ./secrets/eiri-password-hash);
+    # hashedPasswordFile = "/home/eiri/nixos-config/secrets/eiri-password-hash";
     extraGroups = [ 
       "networkmanager" # Switch network without sudo
       "wheel"
@@ -256,6 +292,5 @@
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   
   system.stateVersion = "25.11"; # Did you read the comment?
-
 }
 
