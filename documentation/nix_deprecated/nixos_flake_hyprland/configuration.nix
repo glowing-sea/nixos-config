@@ -3,6 +3,7 @@
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
 { config, lib, pkgs, ... }:
+
 {
   imports = [ ./hardware-configuration.nix ];
 
@@ -17,68 +18,75 @@
   networking.hostName = "eiri-coffee";
   networking.networkmanager.enable = true;
   services.openssh.enable = true;
-  services.openssh.settings.PasswordAuthentication = true; # Optional, Explicit
-  services.openssh.settings.PermitRootLogin = "no"; # Optional, Explicit
+
+  # Hyperland
+  services.getty.autologinUser = "eiri";
+  programs.hyprland = {
+    enable = true;
+    # withUWSM = true; # systemd wrapper of wayland
+    xwayland.enable = true;
+  };
+  
+  # Allow screen sharing and file picker
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ 
+      pkgs.xdg-desktop-portal-hyprland 
+      pkgs.xdg-desktop-portal-gtk 
+    ];
+    config.common.default = "*"; # Tells portals to use available backends for everything
+  };
 
   # Nvidia Settings
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-  };
   nixpkgs.config.allowUnfree = true;
+  hardware.graphics.enable = true;
   services.xserver.videoDrivers = [ "amdgpu" "nvidia" ];
   hardware.nvidia = {
     modesetting.enable = true;
     open = true;
     package = config.boot.kernelPackages.nvidiaPackages.latest;
-    # powerManagement.enable = true;
-    # powerManagement.finegrained = true;
-    dynamicBoost.enable = true;
     prime = {
       amdgpuBusId = "PCI:6:0:0";
       nvidiaBusId = "PCI:1:0:0";
       offload = { enable = true; enableOffloadCmd = true; };
     };
-    nvidiaSettings = true;
   };
 
-  # Audio & Printing
+  # Audio
   services.printing.enable = true;
-  services.pulseaudio.enable = false;
-  security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
   };
-  
-  # DE
-  services.xserver.enable = true;
-  services.displayManager = {
-    sddm.enable = true;
-    # Enable autologin
-    autoLogin = {
-      enable = true;
-      user = "eiri";
-    };
-  };
-  services.desktopManager.plasma6.enable = true;
-  services.xserver.xkb = { layout = "au"; variant = ""; }; # keymap in x11  
+
 
   # Essential System Tools
   programs.firefox.enable = true;
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-    localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network
-  };
   environment.systemPackages = with pkgs; [
-    neovim
+    # Core
+    git
+    vim
     wget
-    pciutils
-    fastfetch
+    foot # fallback standardlone terminal
+    kitty # GPU-accerlated terminal
+    
+    # Hyprland Ecosystem
+    waybar # customisable bar at the top of the screen
+    hyprpaper # simple wallpaper
+    swww # animated wallpaper
+    mako # notification
+    libnotify # notification bridge
+    
+    # System Monitors
+    nvtopPackages.full # GPU monitor
+    nvitop # Python-based GPU monitor (great for ML)    
+    fastfetch    
+    
+    # Search
+    fzf # fuzzy finder
+    ripgrep # alternative to grep
   ];
   
   # User
@@ -90,25 +98,12 @@
       "wheel"
       "video" # give user direct access to video hardware devices or webcam
     ];
-    packages = with pkgs; [
-    #  Moved to home.nix
-    ];
   };
 
   # Locale
   time.timeZone = "Australia/Sydney";
   i18n.defaultLocale = "en_AU.UTF-8";
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_AU.UTF-8";
-    LC_IDENTIFICATION = "en_AU.UTF-8";
-    LC_MEASUREMENT = "en_AU.UTF-8";
-    LC_MONETARY = "en_AU.UTF-8";
-    LC_NAME = "en_AU.UTF-8";
-    LC_NUMERIC = "en_AU.UTF-8";
-    LC_PAPER = "en_AU.UTF-8";
-    LC_TELEPHONE = "en_AU.UTF-8";
-    LC_TIME = "en_AU.UTF-8";
-  };
+  services.xserver.xkb = { layout = "au"; variant = ""; }; # gloabl keyboard default 
 
   # Chinese Input
   i18n.inputMethod = {
@@ -119,21 +114,16 @@
   };
   
   # Fonts
-  fonts.packages = with pkgs; [
-    noto-fonts
-    noto-fonts-cjk-sans
-    noto-fonts-cjk-serif
+  fonts.packages = with pkgs; [ 
+    noto-fonts # Base Latin fonts
+    noto-fonts-cjk-sans # Chinese/Japanese/Korean
     source-han-sans
-    source-han-serif
+    nerd-fonts.jetbrains-mono
   ];
-  fonts.fontconfig = {
-    enable = true;
-    defaultFonts = {
-      # English font FIRST, then CJK as the fallback
-      serif = [ "Noto Serif" "Noto Serif CJK SC" ];
-      sansSerif = [ "Noto Sans" "Noto Sans CJK SC" ];
-      monospace = [ "Noto Sans Mono" "Noto Sans Mono CJK SC" ];
-    };
+  fonts.fontconfig.defaultFonts = {
+    serif = [ "Noto Serif" "Noto Serif CJK SC" ];
+    sansSerif = [ "Noto Sans" "Noto Sans CJK SC" ];
+    monospace = [ "JetBrainsMono Nerd Font" ];
   };
   
   # Flake
@@ -238,7 +228,6 @@
   # and migrated your data accordingly.
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-  
   system.stateVersion = "25.11"; # Did you read the comment?
 
 }

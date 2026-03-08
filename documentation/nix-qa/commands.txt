@@ -1,0 +1,61 @@
+# ============ Nix ============ #
+
+# Update Repo
+sudo nix-channel --update
+
+# Install/Delete/Update
+sudo nixos-rebuild switch
+
+# Remove orphand packages
+sudo nix-collect-garbag
+
+# 删除系统Snapshot
+- sudo nix-env --list-generations --profile /nix/var/nix/profiles/system
+- To delete a specific one: sudo nix-env --delete-generations 10 11 --profile /nix/var/nix/profiles/system
+- To delete everything older than 7 days: sudo nix-env --delete-generations 7d --profile /nix/var/nix/profiles/system
+- To delete everything except the current one:
+sudo nix-env --delete-generations old --profile /nix/var/nix/profiles/system
+- sudo nix-collect-garbage -d
+
+# Update boot entries
+sudo /run/current-system/bin/switch-to-configuration boot
+
+
+# ============ Flake ============= #
+
+# NixOS
+nix flake update
+sudo nix sudo nixos-rebuild switch --flake
+
+# kt env
+nix flake update
+nix develop
+
+sudo nixos-rebuild switch --flake ~/nixos-config.#eiri-coffee --profile-name "kernel-6.18-nvidia-590"
+
+
+# ============ Flake ============= #
+
+旧方法 nix-shell ~/envs/kt.nix
+
+# 新建
+nix flake init
+
+# 激活
+nix develop
+nix develop kt # 如果在.nix注册了的话
+
+# 开启包保护，并在cd到目录的时候自动进入环境
+direnv allow
+
+# 关闭自动进入环境但是包保护依旧存在
+direnv deny
+
+# 关闭包保护
+rm -r .direnv
+
+# 更新
+nix flake update
+
+# flake更新
+sudo nixos-rebuild switch --flake .#eiri-coffee

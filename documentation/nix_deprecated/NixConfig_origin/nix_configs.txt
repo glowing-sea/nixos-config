@@ -1,0 +1,22 @@
+# =========== Depreated ===========
+
+sudo nix-channel --add https://github.com/nix-community/home-manager/archive/release-25.11.tar.gz home-manager
+
+sudo nix-channel --update
+
+imports = [
+    ./hardware-configuration.nix
+    <home-manager/nixos> # This "unlocks" home-manager options
+  ];
+
+
+# ========== Flatpak ===========
+
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+flatseal
+
+# ======== Check Font Order =====
+
+fc-match -s sans-serif | head -n 5
+
