@@ -3,7 +3,8 @@
 
   inputs = {
     # Points to the official NixOS unstable or stable branch
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
   };
 
   outputs = { self, nixpkgs }:
@@ -32,7 +33,9 @@
         shellHook = ''
           echo "Entering Flake-based Research Environment..."
           python --version
-          # python -c "import torch; print(f'CUDA: {torch.cuda.is_available()}')"
+          python -c "import torch; \
+          print(f'Device: {torch.cuda.get_device_name(0)}'); \
+          print(f'Memory: {torch.cuda.get_device_properties(0).total_memory / 1024**3:.2f}GB')"
         '';
       };
     };

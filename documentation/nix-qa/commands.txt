@@ -20,6 +20,17 @@ sudo nix-env --delete-generations old --profile /nix/var/nix/profiles/system
 # Update boot entries
 sudo /run/current-system/bin/switch-to-configuration boot
 
+# ======= Upgrade & Downgrade ========
+
+
+# flake.nix
+nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+home-manager.url = "github:nix-community/home-manager/release-25.11";
+
+# configuration.nix
+boot.kernelPackages = pkgs.linuxPackages;
+hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
+
 
 # ============ Flake ============= #
 

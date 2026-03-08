@@ -8,6 +8,8 @@
 
   # Kernel
   boot.kernelPackages = pkgs.linuxPackages_6_18;
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
+  # boot.kernelPackages = pkgs.linuxPackages;
 
   # Boot
   boot.loader.systemd-boot.enable = true;
@@ -31,9 +33,19 @@
     modesetting.enable = true;
     open = true;
     package = config.boot.kernelPackages.nvidiaPackages.latest;
+
+    # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
+    # Enable this if you have graphical corruption issues or application crashes after waking
+    # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead
+    # of just the bare essentials.
     # powerManagement.enable = true;
+
+    # Fine-grained power management. Turns off GPU when not in use.
+    # Experimental and only works on modern Nvidia GPUs (Turing or newer).
     # powerManagement.finegrained = true;
+
     dynamicBoost.enable = true;
+
     prime = {
       amdgpuBusId = "PCI:6:0:0";
       nvidiaBusId = "PCI:1:0:0";
@@ -75,16 +87,20 @@
     localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network
   };
   environment.systemPackages = with pkgs; [
+    nil
     neovim
     wget
     pciutils
     fastfetch
+    python3
   ];
   
+
   # User
   users.users.eiri = {
     isNormalUser = true;
     description = "eiri";
+    hashedPassword = lib.removeSuffix "\n" (builtins.readFile ./secrets/eiri-password-hash);
     extraGroups = [ 
       "networkmanager" # Switch network without sudo
       "wheel"

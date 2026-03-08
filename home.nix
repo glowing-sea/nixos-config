@@ -20,6 +20,7 @@ in
     # recursive = true;
   # };
 
+  # Software
   home.packages = with pkgs; [
     vlc
     mpv
@@ -27,24 +28,81 @@ in
     kdePackages.kcalc
     kdePackages.kclock
     xournalpp
+    texliveFull
     # uv
     # python3
   ];
+
+  # VS Code
+  programs.vscode = {
+    enable = true;
+    package = pkgs.vscode;
+    # package = pkgs.vscode-fhs;
+    profiles.default.extensions = with pkgs.vscode-extensions; [
+      # Python
+      ms-python.python
+      ms-python.vscode-pylance
+      ms-python.debugpy
+
+      # Jupyter
+      ms-toolsai.jupyter
+      ms-toolsai.jupyter-renderers
+      ms-toolsai.jupyter-keymap
+      ms-toolsai.vscode-jupyter-slideshow
+      ms-toolsai.vscode-jupyter-cell-tags
+
+      # C++
+      ms-vscode.cpptools
+      ms-vscode.cpptools-extension-pack
+      ms-vscode.cmake-tools
+
+      # AI
+      github.copilot
+      github.copilot-chat
+
+      # Nix
+      mkhl.direnv                 # The direnv connector
+      jnoortheen.nix-ide          # Essential for Nix syntax highlighting/flakes
+
+      # Latex
+      james-yu.latex-workshop
+      # ms-vscode.cpptools
+      # Add your specific research tools here
+    ];
+
+#     profiles.default.userSettings = {
+#       "files.autoSave" = "afterDelay";
+#       "update.mode" = "none"; # Diable editor update
+#       "extensions.autoUpdate" = false; # no extention update
+#       "extensions.autoCheckUpdates" = false; # no extention update
+#       # "telemetry.telemetryLevel" = "off";
+#       # ... your other research settings
+#     };
+
+#   userSettings = {
+#     "editor.fontSize" = 14;
+#     "workbench.colorTheme" = "Default Dark Modern";
+#     "update.mode" = "none"; # Let Nix handle updates
+#     };
+
+  };
+
 
   xdg.userDirs = {
     enable = true;
     createDirectories = true;
   };
 
-#   xdg.configFile = {
-#     "kdeglobals".source = createSimlink "kde/kdeglobals";
-#     # "plasmarc".source = createSimlink "kde/plasmarc";
-#     "kglobalshortcutsrc".source = createSimlink "kde/kglobalshortcutsrc";
-#     "kwinrc".source = createSimlink "kde/kwinrc";
-#
-#     # You can add Konsole or other apps here too
-#     # "konsole".source = createSimlink "konsole";
-#   };
+  xdg.configFile = {
+    "Code/User/settings.json".source = createSimlink "code/settings.json";
+    # "kdeglobals".source = createSimlink "kde/kdeglobals";
+    # "plasmarc".source = createSimlink "kde/plasmarc";
+    # "kglobalshortcutsrc".source = createSimlink "kde/kglobalshortcutsrc";
+    # "kwinrc".source = createSimlink "kde/kwinrc";
+
+    # You can add Konsole or other apps here too
+    # "konsole".source = createSimlink "konsole";
+  };
 
   programs.git = {
     enable = true;

@@ -96,3 +96,6 @@ cd ~/nixos-config
 git add .
 nix flake update
 sudo nix sudo nixos-rebuild switch --flake
+
+# Declare password
+nix-shell -p mkpasswd --run "mkpasswd -m sha-512"

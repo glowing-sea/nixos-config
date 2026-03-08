@@ -1,0 +1,8 @@
+{
+  "files.autoSave": "afterDelay",
+  "extensions.autoCheckUpdates": false,
+  "extensions.autoUpdate": false,
+  "update.mode": "none",
+  "workbench.secondarySideBar.defaultVisibility": "hidden",
+  "github.copilot.nextEditSuggestions.enabled": true
+}
