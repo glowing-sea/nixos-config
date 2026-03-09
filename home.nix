@@ -46,6 +46,8 @@ in
     ppsspp
     obs-studio
     qdiskinfo
+    gimp
+    upscayl
     # uv
     # python3
   ];

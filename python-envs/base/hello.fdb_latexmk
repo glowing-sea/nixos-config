@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1772996513.08752 "/home/eiri/envs/base/hello.tex" "hello.pdf" "hello" 1772996513.24877 0
-  "/home/eiri/envs/base/hello.tex" 1772996512.93991 395 d402c2be429a519f8b050e8a9f12d8b5 ""
+["pdflatex"] 1773072299.05924 "/home/eiri/envs/base/hello.tex" "hello.pdf" "hello" 1773072299.20975 0
+  "/home/eiri/envs/base/hello.tex" 1773072298.92476 395 d402c2be429a519f8b050e8a9f12d8b5 ""
   "/nix/store/a5nnpi21v28bmb7jcrhskjv3ycl9jf9s-texlive-2025-env/share/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1 5523625 844b65f15ed9ab21dfecf92ea30ff1ef ""
   "/nix/store/a5nnpi21v28bmb7jcrhskjv3ycl9jf9s-texlive-2025-env/share/texmf-var/web2c/pdftex/pdflatex.fmt" 1 3600351 76c3905f09cf0b324843316aebd2b6a5 ""
   "/nix/store/a5nnpi21v28bmb7jcrhskjv3ycl9jf9s-texlive-2025-env/share/texmf-var/web2c/texmf.cnf" 1 43847 44ea2712ca22fae8db3b29d32511a0f6 ""
@@ -33,7 +33,7 @@
   "/nix/store/h0hlq01b40jshml14022qngxbanxkvqk-texlive-2025-env-texmfdist/tex/latex/base/article.cls" 1 20144 b966087dda3b194755eb460d32e2ef75 ""
   "/nix/store/h0hlq01b40jshml14022qngxbanxkvqk-texlive-2025-env-texmfdist/tex/latex/base/size10.clo" 1 8448 686612a86f0e04f41ea577f5ec7e83d8 ""
   "/nix/store/h0hlq01b40jshml14022qngxbanxkvqk-texlive-2025-env-texmfdist/tex/latex/l3backend/l3backend-pdftex.def" 1 30351 a2b09edc6c93a742566b222c33d0278e ""
-  "hello.aux" 1772996513.23373 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "hello.aux" 1773072299.19276 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
   (generated)
   "hello.aux"
   "hello.log"

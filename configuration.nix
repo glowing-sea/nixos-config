@@ -30,16 +30,47 @@
   networking.hostName = "eiri-coffee";
   networking.networkmanager.enable = true;
   services.openssh = {
-  enable = true;
-  # Ensure the SFTP subsystem is explicitly enabled
-  allowSFTP = true;
-  settings = {
-    # Sometimes Dolphin struggles if PasswordAuthentication is off
-    # unless you have your SSH keys perfectly mapped in ~/.ssh/config
-    PasswordAuthentication = true;
-    PermitRootLogin = "no"; # Optional, Explicit
+    enable = true;
+    # Ensure the SFTP subsystem is explicitly enabled
+    allowSFTP = true;
+    settings = {
+      # Sometimes Dolphin struggles if PasswordAuthentication is off
+      # unless you have your SSH keys perfectly mapped in ~/.ssh/config
+      PasswordAuthentication = true;
+      PermitRootLogin = "no"; # Optional, Explicit
+    };
   };
-};
+
+
+  # VPN
+  services.tailscale.enable = true;
+  # 2. Force tailscaled to use nftables (Critical for clean nftables-only systems)
+  # This avoids the "iptables-compat" translation layer issues.
+  systemd.services.tailscaled = {
+    serviceConfig.Environment = [ "TS_DEBUG_FIREWALL_MODE=nftables" ];
+    # Ensure it starts after the network is up but doesn't block boot
+#     after = [ "network-pre.target" ];
+#     wants = [ "network-pre.target" ];
+  };
+  # 3. Optimization: Prevent systemd from waiting for network online
+  # (Optional but recommended for faster boot with VPNs)
+  systemd.network.wait-online.enable = false;
+  boot.initrd.systemd.network.wait-online.enable = false;
+
+
+  # Firewall
+  networking.nftables.enable = true;
+  networking.firewall = {
+    enable = true;
+    # checkReversePath = "loose"; # Default None
+    # Always allow traffic from your Tailscale network
+    trustedInterfaces = [ "tailscale0" ];
+    # Allow the Tailscale UDP port through the firewall
+    allowedUDPPorts = [ config.services.tailscale.port ];
+    allowedTCPPorts = [ 1234 ]; # Append port to the port list
+  };
+
+
 
   # Nvidia Settings
   hardware.graphics = {
@@ -115,6 +146,18 @@
 
 
   # Essential System Tools
+#   programs.nix-ld.enable = true;
+#   # Optional: add libraries that the vscode server usually needs
+#   programs.nix-ld.libraries = with pkgs; [
+#     stdenv.cc.cc
+#     zlib
+#     fuse3
+#     icu
+#     nss
+#     openssl
+#     curl
+#     expat
+#   ];
   services.flatpak.enable = true;
   programs.firefox.enable = true;
   programs.steam = {
@@ -134,6 +177,7 @@
     nvtopPackages.full # GPU monitor
     nvitop # Python-based GPU monitor (great for ML)
     kdiskmark
+    kdePackages.partitionmanager
 
     # Hyprland
 
@@ -158,7 +202,11 @@
     wl-clipboard      # Clipboard (copy/paste support)
     pavucontrol       # Audio GUI (essential for Pipewire)
   ];
-  
+
+  # Virtual Machine
+#   virtualisation.virtualbox.host.enable = true;
+#   users.extraGroups.vboxusers.members = [ "eiri" ];
+#   virtualisation.virtualbox.host.enableExtensionPack = true; # Optional: for USB 2.0/3.0 support
 
   # User
   # users.mutableUsers = false;
