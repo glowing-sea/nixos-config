@@ -133,6 +133,7 @@
     python3
     nvtopPackages.full # GPU monitor
     nvitop # Python-based GPU monitor (great for ML)
+    kdiskmark
 
     # Hyprland
 

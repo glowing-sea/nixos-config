@@ -16,6 +16,9 @@ reboot
 # Flatpak
 
 
+# Firewall bypass
+sudo iptables -I INPUT 1 -p tcp --dport 1234 -j ACCEPT
+
 
 # ============ Nix ============ #
 
