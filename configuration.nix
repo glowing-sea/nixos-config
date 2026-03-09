@@ -12,15 +12,34 @@
   # boot.kernelPackages = pkgs.linuxPackages;
 
   # Boot
+  boot.loader.timeout = 1;
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  # Swap
+  # In your configuration.nix or hardware-configuration.nix
+  swapDevices = [
+    {
+      device = "/swap/swapfile";
+      # Since it's already created, NixOS will just use it.
+      # If it wasn't there, NixOS could create it if you added 'size = 16384;'
+    }
+  ];
 
   # Network
   networking.hostName = "eiri-coffee";
   networking.networkmanager.enable = true;
-  services.openssh.enable = true;
-  services.openssh.settings.PasswordAuthentication = true; # Optional, Explicit
-  services.openssh.settings.PermitRootLogin = "no"; # Optional, Explicit
+  services.openssh = {
+  enable = true;
+  # Ensure the SFTP subsystem is explicitly enabled
+  allowSFTP = true;
+  settings = {
+    # Sometimes Dolphin struggles if PasswordAuthentication is off
+    # unless you have your SSH keys perfectly mapped in ~/.ssh/config
+    PasswordAuthentication = true;
+    PermitRootLogin = "no"; # Optional, Explicit
+  };
+};
 
   # Nvidia Settings
   hardware.graphics = {
@@ -70,6 +89,7 @@
   services.displayManager = {
     sddm.enable = true;
     # Enable autologin
+    # defaultSession = "hyprland";
     autoLogin = {
       enable = true;
       user = "eiri";
@@ -78,8 +98,15 @@
   services.desktopManager.plasma6.enable = true;
   services.xserver.xkb = { layout = "au"; variant = ""; }; # keymap in x11  
 
+#   xdg.mime.defaultApplications = {
+#     "text/html" = "firefox.desktop";
+#     "x-scheme-handler/http" = "firefox.desktop";
+#     "x-scheme-handler/https" = "firefox.desktop";
+#   };
+
+
   # Hyperland
-  services.getty.autologinUser = "eiri";
+  # services.getty.autologinUser = "eiri";
   programs.hyprland = {
     enable = true;
     # withUWSM = true; # systemd wrapper of wayland
@@ -97,6 +124,7 @@
     localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network
   };
   environment.systemPackages = with pkgs; [
+    # kdePackages.sddm-kcm
     nil
     neovim
     wget
@@ -187,7 +215,7 @@
       monospace = [ "Noto Sans Mono" "Noto Sans Mono CJK SC" ];
     };
   };
-  
+
   # Flake
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   programs.direnv.enable = true;

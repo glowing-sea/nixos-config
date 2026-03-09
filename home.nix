@@ -27,9 +27,25 @@ in
     kdePackages.kate
     kdePackages.kcalc
     kdePackages.kclock
+    kdePackages.kolourpaint
+    kdePackages.kdenlive
+    kdePackages.elisa
+    kdePackages.krecorder
+    joplin-desktop
+    sqlitebrowser
     xournalpp
+    kdePackages.kmines
     texliveFull # many packages !!!
     mission-center
+    syncthing
+    zoom-us
+    chromium
+    libreoffice-qt-fresh
+    onlyoffice-desktopeditors
+    krita
+    ppsspp
+    obs-studio
+    qdiskinfo
     # uv
     # python3
   ];
@@ -62,11 +78,13 @@ in
       github.copilot-chat
 
       # Nix
-      mkhl.direnv                 # The direnv connector
-      jnoortheen.nix-ide          # Essential for Nix syntax highlighting/flakes
+      mkhl.direnv # The direnv connector
+      jnoortheen.nix-ide # Essential for Nix syntax highlighting/flakes
 
-      # Latex
+      # Others
       james-yu.latex-workshop
+      mechatroner.rainbow-csv
+      # (Manually Install !!) CSV by ReprEng
       # ms-vscode.cpptools
       # Add your specific research tools here
     ];
@@ -123,10 +141,16 @@ in
       python = "python3";
       activate-kt = "nix develop ~/nixos-config/python-envs/kt";
       activate-base = "nix develop ~/nixos-config/python-envs/base";
+      nvidia-run = "nvidia-offload";
+      hypr = "start-hyprland";
     };
     bashrcExtra = ''
       export PATH="$HOME/.local/bin:$PATH"
-      echo "Welcome back, eiri!"
+
+      # The NixOS way: Only echo if the shell is interactive
+      if [[ $- == *i* ]]; then
+        echo "Welcome back, eiri!"
+      fi
     '';
   };
 }

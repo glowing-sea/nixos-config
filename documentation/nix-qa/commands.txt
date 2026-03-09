@@ -34,7 +34,12 @@ sudo nix-collect-garbag
 - To delete everything older than 7 days: sudo nix-env --delete-generations 7d --profile /nix/var/nix/profiles/system
 - To delete everything except the current one:
 sudo nix-env --delete-generations old --profile /nix/var/nix/profiles/system
-- sudo nix-collect-garbage -d
+
+
+sudo nix-collect-garbage -d
+sudo nix-collect-garbage --delete-older-than 7d
+
+sudo nixos-rebuild boot
 
 # Update boot entries
 sudo /run/current-system/bin/switch-to-configuration boot
@@ -61,7 +66,11 @@ sudo nix sudo nixos-rebuild switch --flake
 nix flake update
 nix develop
 
-sudo nixos-rebuild switch --flake ~/nixos-config.#eiri-coffee --profile-name "kernel-6.18-nvidia-590"
+sudo nixos-rebuild switch --flake ~/nixos-config#eiri-coffee --profile-name "kernel-6.18-nvidia-590"
+
+
+# List profile
+ls -l /nix/var/nix/profiles/system-profiles/
 
 
 # ============ Flake ============= #

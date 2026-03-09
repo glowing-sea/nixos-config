@@ -50,7 +50,7 @@ btrfs property set /mnt/swap/swapfile compression ""
 dd if=/dev/zero of=/mnt/swap/swapfile bs=1M count=16384 status=progress # 16GB Swap
 chmod 600 /mnt/swap/swapfile
 mkswap /mnt/swap/swapfile
-swapon /mnt/swap/swapfile
+swapon /mnt/swap/swapfile #temporary
 
 # Generate config
 nixos-generate-config --root /mnt
@@ -103,3 +103,9 @@ nix-shell -p mkpasswd --run "mkpasswd -m sha-512"
 # Flatpak
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak update
+
+# KDE Extension
+Themal
+
+# VS Code Extension
+CSV by ReprEng
