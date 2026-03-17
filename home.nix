@@ -83,6 +83,12 @@ in
       mkhl.direnv # The direnv connector
       jnoortheen.nix-ide # Essential for Nix syntax highlighting/flakes
 
+      # Speller
+      streetsidesoftware.code-spell-checker
+
+      # Markdown (Buggy)
+      # shd101wyy.markdown-preview-enhanced
+
       # Others
       james-yu.latex-workshop
       mechatroner.rainbow-csv

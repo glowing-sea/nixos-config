@@ -41,6 +41,10 @@
     };
   };
 
+  # Bluetooth
+  hardware.bluetooth.enable = true;
+  # services.blueman.enable = true;
+
 
   # VPN
   services.tailscale.enable = true;
@@ -64,7 +68,7 @@
     enable = true;
     # checkReversePath = "loose"; # Default None
     # Always allow traffic from your Tailscale network
-    trustedInterfaces = [ "tailscale0" ];
+    trustedInterfaces = [ "tailscale0" "virbr0"  ];
     # Allow the Tailscale UDP port through the firewall
     allowedUDPPorts = [ config.services.tailscale.port ];
     allowedTCPPorts = [ 1234 ]; # Append port to the port list
@@ -93,6 +97,8 @@
     # Fine-grained power management. Turns off GPU when not in use.
     # Experimental and only works on modern Nvidia GPUs (Turing or newer).
     # powerManagement.finegrained = true;
+
+    # For ampere (30 series) and later cards power saving is enabled by default?
 
     dynamicBoost.enable = true;
 
@@ -174,10 +180,15 @@
     pciutils
     fastfetch
     python3
+    black
+    ffmpeg
     nvtopPackages.full # GPU monitor
     nvitop # Python-based GPU monitor (great for ML)
     kdiskmark
     kdePackages.partitionmanager
+    hunspell
+    hunspellDicts.en_US
+    hunspellDicts.en_AU
 
     # Hyprland
 
@@ -203,10 +214,51 @@
     pavucontrol       # Audio GUI (essential for Pipewire)
   ];
 
+
   # Virtual Machine
 #   virtualisation.virtualbox.host.enable = true;
 #   users.extraGroups.vboxusers.members = [ "eiri" ];
 #   virtualisation.virtualbox.host.enableExtensionPack = true; # Optional: for USB 2.0/3.0 support
+
+
+
+
+
+# ===================== Virtual Machine ===============
+
+# Enable the libvirtd daemon
+# virtualisation.libvirtd.enable = true;
+
+# Install the Virt-Manager GUI
+# programs.virt-manager.enable = true;
+
+# Enabled by default when using Gnome and Plasma
+# programs.dconf.enable = true;
+
+# Added Elsewhere: networking.firewall.trustedInterfaces = [ "virbr0" ];
+# Added Elsewhere: users.users.eiri.extraGroups = [ "libvirtd" "kvm" ];
+
+
+# ================= Deprecated Settings ==============
+
+# Virtual Network
+# virsh net-start default
+# virsh net-autostart default
+
+# Ensure your user is in the correct group
+# users.groups.libvirtd.members = ["eiri"];
+# Required for Virt-Manager to save settings
+# programs.dconf.enable = true;
+# Ensure your user is in the correct group
+# # Wiki Setup
+# virtualisation.libvirtd.enable = true;
+# programs.virt-manager.enable = true;
+# users.groups.libvirtd.members = ["your_username"];
+# virtualisation.spiceUSBRedirection.enable = true;
+
+# ==============================
+
+
 
   # User
   # users.mutableUsers = false;
@@ -218,6 +270,9 @@
       "networkmanager" # Switch network without sudo
       "wheel"
       "video" # give user direct access to video hardware devices or webcam
+      "render"
+      "libvirtd" # for virtual machine
+      "kvm" # virtual machine
     ];
     packages = with pkgs; [
     #  Moved to home.nix
@@ -270,6 +325,24 @@
   programs.direnv.enable = true;
   # nix.registry.kt.to = { type = "path"; path = "/home/eiri/github/kt"; };
 
+
+  # ===================== AI =======================
+
+#   # AI
+#   # 1. Enable the Ollama service
+#   services.ollama = {
+#     enable = true;
+#
+#     # This automatically selects the version of Ollama built with CUDA support
+#     acceleration = "cuda";
+#
+#     # Optional: Open the firewall if you want to access Ollama from your Debian VM
+#     # (since we already added tailscale0 and virbr0 to trustedInterfaces,
+#     # this may not be strictly necessary, but it's good practice).
+#     # openFirewall = true;
+#   };
+
+  # ==========================================
 
 
 

@@ -27,6 +27,16 @@
             torchvision-bin
             numpy
             pandas
+
+            # Reference Projects
+            matplotlib
+            scikit-learn
+            jupyter
+
+            # notebook
+            # pip
+            # ipykernel
+            # jupyterlab
           ]))
         ];
 
